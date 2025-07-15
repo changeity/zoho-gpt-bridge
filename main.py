@@ -14,12 +14,14 @@ CLIENT_SECRET = os.getenv("ZOHO_CLIENT_SECRET")
 REFRESH_TOKEN = os.getenv("ZOHO_REFRESH_TOKEN")
 WORKSPACE_ID = os.getenv("ZOHO_WORKSPACE_ID")
 API_DOMAIN = os.getenv("ZOHO_API_DOMAIN", "https://www.zohoapis.com")
+OAUTH_DOMAIN = os.getenv("ZOHO_OAUTH_DOMAIN", "https://accounts.zoho.com")  # <-- Correct OAuth domain
 
 print("DEBUG: CLIENT_ID =", CLIENT_ID)
 print("DEBUG: CLIENT_SECRET =", CLIENT_SECRET[:4] + "..." if CLIENT_SECRET else None)
 print("DEBUG: REFRESH_TOKEN =", REFRESH_TOKEN[:4] + "..." if REFRESH_TOKEN else None)
 print("DEBUG: WORKSPACE_ID =", WORKSPACE_ID)
 print("DEBUG: API_DOMAIN =", API_DOMAIN)
+print("DEBUG: OAUTH_DOMAIN =", OAUTH_DOMAIN)
 
 ACCESS_TOKEN = os.getenv("ZOHO_ACCESS_TOKEN")
 TOKEN_EXPIRY = 0  # Epoch time when token expires
@@ -31,7 +33,7 @@ class SQLQuery(BaseModel):
 
 async def refresh_access_token():
     global ACCESS_TOKEN, TOKEN_EXPIRY
-    url = f"{API_DOMAIN}/oauth/v2/token"
+    url = f"{OAUTH_DOMAIN}/oauth/v2/token"
     params = {
         "refresh_token": REFRESH_TOKEN,
         "client_id": CLIENT_ID,
@@ -64,7 +66,7 @@ async def ensure_token():
 async def query_zoho(query: SQLQuery):
     try:
         await ensure_token()
-        url = f"https://analyticsapi.zoho.com/restapi/v2/workspaces/{WORKSPACE_ID}/sql"
+        url = f"{API_DOMAIN}/analyticsapi/v2/workspaces/{WORKSPACE_ID}/sql"
         headers = {
             "Authorization": f"Zoho-oauthtoken {ACCESS_TOKEN}",
             "Content-Type": "application/json"
