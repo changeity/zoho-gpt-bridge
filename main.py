@@ -8,6 +8,12 @@ import time
 
 load_dotenv()
 
+print("DEBUG: CLIENT_ID =", CLIENT_ID)
+print("DEBUG: CLIENT_SECRET =", CLIENT_SECRET[:4] + "..." if CLIENT_SECRET else None)
+print("DEBUG: REFRESH_TOKEN =", REFRESH_TOKEN[:4] + "..." if REFRESH_TOKEN else None)
+print("DEBUG: WORKSPACE_ID =", WORKSPACE_ID)
+print("DEBUG: API_DOMAIN =", API_DOMAIN)
+
 app = FastAPI()
 
 # Load environment variables
