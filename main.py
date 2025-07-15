@@ -47,7 +47,7 @@ async def refresh_access_token():
                 TOKEN_EXPIRY = time.time() + int(data.get("expires_in", 3600)) - 60
                 print(f"[INFO] Access token refreshed successfully: expires in {data.get('expires_in')} seconds")
             else:
-                text = await response.text()
+                text = response.text
                 print(f"[ERROR] Failed to refresh access token: {response.status_code} {text}")
                 raise HTTPException(status_code=500, detail="Failed to refresh access token")
     except Exception as e:
@@ -73,7 +73,7 @@ async def query_zoho(query: SQLQuery):
         async with httpx.AsyncClient() as client:
             response = await client.post(url, headers=headers, json=payload)
             if response.status_code != 200:
-                text = await response.text()
+                text = response.text
                 print(f"[ERROR] Zoho API error: {response.status_code} {text}")
                 raise HTTPException(status_code=response.status_code, detail=response.text)
             return response.json()
